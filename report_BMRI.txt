@@ -1,0 +1,16 @@
+Training Report — BMRI
+Generated: 2026-07-11 17:23:04.138353
+Data sampai: 2026-07-11
+Total data: 5633
+Fitur: ['Return', 'SMA_20', 'SMA_50', 'EMA_20', 'RSI_14', 'MACD']
+Train / Test: 4506 / 1127
+
+CV Results (training set only):
+accuracy: 0.524 ± 0.028
+auc: 0.515 ± 0.008
+
+Hold-out Accuracy: 0.5501
+Hold-out ROC-AUC: 0.5265
+Confusion Matrix:
+[[474 145]
+ [362 146]]

@@ -1,0 +1,16 @@
+Training Report — BBNI
+Generated: 2026-07-11 17:22:35.623653
+Data sampai: 2026-07-11
+Total data: 5517
+Fitur: ['Return', 'SMA_20', 'SMA_50', 'EMA_20', 'RSI_14', 'MACD']
+Train / Test: 4413 / 1104
+
+CV Results (training set only):
+accuracy: 0.534 ± 0.039
+auc: 0.519 ± 0.012
+
+Hold-out Accuracy: 0.5643
+Hold-out ROC-AUC: 0.5385
+Confusion Matrix:
+[[587  33]
+ [448  36]]

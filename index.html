@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StockSense — Bank Stock ML Predictor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo">
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 28 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="28" height="28" rx="8" fill="#00E5A0" />
+            <polyline
+              points="4,20 9,12 13,16 18,8 24,14"
+              stroke="#0A1628"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+          </svg>
+          <span class="logo-text">StockSense</span>
+        </div>
+        <div class="header-badge">Random Forest · ML Model</div>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- LEFT: Input Panel -->
+      <section class="panel panel-input">
+        <div class="panel-label">ANALYZE STOCK</div>
+        <h2 class="panel-title">Masukkan Data<br />Harga Hari Ini</h2>
+
+        <!-- Stock selector -->
+        <div class="stock-selector">
+          <button class="stock-btn active" data-stock="BBCA">
+            <span class="stock-ticker">BBCA</span>
+            <span class="stock-name">Bank Central Asia</span>
+          </button>
+          <button class="stock-btn" data-stock="BBRI">
+            <span class="stock-ticker">BBRI</span>
+            <span class="stock-name">Bank Rakyat Indonesia</span>
+          </button>
+          <button class="stock-btn" data-stock="BBNI">
+            <span class="stock-ticker">BBNI</span>
+            <span class="stock-name">Bank Negara Indonesia</span>
+          </button>
+          <button class="stock-btn" data-stock="BMRI">
+            <span class="stock-ticker">BMRI</span>
+            <span class="stock-name">Bank Mandiri</span>
+          </button>
+        </div>
+
+        <!-- Form -->
+        <form class="price-form" id="priceForm" autocomplete="off">
+          <div class="form-field">
+            <label class="field-label">DATE</label>
+            <div class="input-wrap">
+              <input type="date" id="date" name="date" required />
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-field">
+              <label class="field-label">OPEN</label>
+              <div class="input-wrap">
+                <span class="input-prefix">Rp</span>
+                <input
+                  type="number"
+                  id="open"
+                  name="open"
+                  placeholder="9.000"
+                  min="0"
+                  step="1"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="field-label">HIGH</label>
+              <div class="input-wrap">
+                <span class="input-prefix">Rp</span>
+                <input
+                  type="number"
+                  id="high"
+                  name="high"
+                  placeholder="9.100"
+                  min="0"
+                  step="1"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="field-label">LOW</label>
+              <div class="input-wrap">
+                <span class="input-prefix">Rp</span>
+                <input
+                  type="number"
+                  id="low"
+                  name="low"
+                  placeholder="8.900"
+                  min="0"
+                  step="1"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="field-label">CLOSE</label>
+              <div class="input-wrap">
+                <span class="input-prefix">Rp</span>
+                <input
+                  type="number"
+                  id="close"
+                  name="close"
+                  placeholder="9.050"
+                  min="0"
+                  step="1"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div id="validationMsg" class="validation-msg hidden"></div>
+
+          <button type="submit" class="analyze-btn" id="analyzeBtn">
+            <span class="btn-text">Analyze</span>
+            <span class="btn-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <span class="btn-spinner hidden">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                class="spinner-icon"
+              >
+                <circle
+                  cx="8"
+                  cy="8"
+                  r="6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-dasharray="28 8"
+                  fill="none"
+                />
+              </svg>
+            </span>
+          </button>
+        </form>
+
+        <!-- Model info -->
+        <div class="model-info">
+          <div class="info-row">
+            <span class="info-label">Model</span>
+            <span class="info-val">Random Forest</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Features</span>
+            <span class="info-val">Technical Indicators</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Data</span>
+            <span class="info-val">2000 – 2026</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: Result Panel -->
+      <section class="panel panel-result">
+        <div class="panel-label">PREDICTION</div>
+
+        <!-- Idle state -->
+        <div class="result-idle" id="resultIdle">
+          <div class="idle-graphic">
+            <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+              <polyline
+                points="5,50 20,30 35,38 50,18 65,28 75,15"
+                stroke="#1E3A5F"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <circle cx="75" cy="15" r="4" fill="#00E5A0" />
+            </svg>
+          </div>
+          <p class="idle-text">
+            Pilih saham & masukkan harga untuk memulai analisis.
+          </p>
+        </div>
+
+        <!-- Result card (hidden until prediction) -->
+        <div class="result-card hidden" id="resultCard">
+          <!-- Stock header -->
+          <div class="result-header">
+            <div class="result-stock-wrap">
+              <span class="result-ticker" id="resTicker">BBCA</span>
+              <span class="result-fullname" id="resName"
+                >Bank Central Asia</span
+              >
+            </div>
+            <div class="result-date" id="resDate"></div>
+          </div>
+
+          <!-- Main prediction -->
+          <div class="prediction-block" id="predictionBlock">
+            <div class="pred-direction" id="predDirection">
+              <div class="pred-arrow" id="predArrow">
+                <!-- arrow rendered by JS -->
+              </div>
+              <div class="pred-label" id="predLabel">UP</div>
+            </div>
+
+            <!-- Confidence gauge -->
+            <div class="confidence-wrap">
+              <div class="conf-header">
+                <span class="conf-title">Confidence</span>
+                <span class="conf-value" id="confValue">—</span>
+              </div>
+              <div class="conf-bar-track">
+                <div class="conf-bar-fill" id="confBarFill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- OHLC summary -->
+          <div class="ohlc-summary" id="ohlcSummary">
+            <div class="ohlc-item">
+              <span class="ohlc-lbl">O</span>
+              <span class="ohlc-val" id="sumOpen">—</span>
+            </div>
+            <div class="ohlc-item">
+              <span class="ohlc-lbl">H</span>
+              <span class="ohlc-val" id="sumHigh">—</span>
+            </div>
+            <div class="ohlc-item">
+              <span class="ohlc-lbl">L</span>
+              <span class="ohlc-val" id="sumLow">—</span>
+            </div>
+            <div class="ohlc-item">
+              <span class="ohlc-lbl">C</span>
+              <span class="ohlc-val" id="sumClose">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error state -->
+        <div class="result-error hidden" id="resultError">
+          <div class="error-icon">!</div>
+          <p class="error-msg" id="errorMsg">Terjadi kesalahan.</p>
+          <p class="error-hint">Pastikan backend berjalan di localhost:5000</p>
+        </div>
+
+        <!-- Chart -->
+        <div class="chart-section" id="chartSection">
+          <div class="chart-header">
+            <span class="chart-title">Simulated OHLC · Entry Analysis</span>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="ohlcChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Model Status -->
+        <div class="model-status-section">
+          <div class="status-header">
+            <span class="status-title">MODEL STATUS</span>
+            <button
+              class="refresh-btn"
+              id="refreshStatus"
+              title="Refresh status"
+            >
+              ↺
+            </button>
+          </div>
+          <div class="status-grid" id="statusGrid">
+            <div class="status-item loading" data-stock="BBCA">
+              <span class="s-ticker">BBCA</span><span class="s-dot"></span>
+            </div>
+            <div class="status-item loading" data-stock="BBRI">
+              <span class="s-ticker">BBRI</span><span class="s-dot"></span>
+            </div>
+            <div class="status-item loading" data-stock="BBNI">
+              <span class="s-ticker">BBNI</span><span class="s-dot"></span>
+            </div>
+            <div class="status-item loading" data-stock="BMRI">
+              <span class="s-ticker">BMRI</span><span class="s-dot"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+Training Report — BBCA
+Generated: 2026-07-11 17:21:58.529737
+Data sampai: 2026-07-11
+Total data: 5397
+Fitur: ['Return', 'SMA_20', 'SMA_50', 'EMA_20', 'RSI_14', 'MACD']
+Train / Test: 4317 / 1080
+
+CV Results (training set only):
+accuracy: 0.529 ± 0.015
+auc: 0.515 ± 0.018
+
+Hold-out Accuracy: 0.5630
+Hold-out ROC-AUC: 0.5644
+Confusion Matrix:
+[[585  20]
+ [452  23]]
