@@ -62,8 +62,8 @@ for ticker in TICKERS:
         # Membaca model Random Forest
         # serta daftar fitur yang digunakan model
         MODELS[ticker] = {
-            "model":    pickle.load(open(f"model_{ticker}.pkl",    "rb")),
-            "features": pickle.load(open(f"features_{ticker}.pkl", "rb")),
+            "model":    pickle.load(open(f"model_{ticker}_pure70.pkl",    "rb")),
+            "features": pickle.load(open(f"features_{ticker}_pure70.pkl", "rb")),
         }
         print(f"  ✅ Model {ticker} loaded")
     except FileNotFoundError:
@@ -89,8 +89,8 @@ def calculate_features(ticker, input_date, open_price, high_price, low_price, cl
     4. Mengembalikan data fitur yang akan digunakan model.
     """
     # Mengambil data historis sekitar 120 hari
-    start = (pd.to_datetime(input_date) - pd.Timedelta(days=120)).strftime("%Y-%m-%d")
-    end = (pd.to_datetime(input_date) + pd.Timedelta(days=1)).strftime("%Y-%m-%d")
+    start = (pd.to_datetime(input_date) - pd.Timedelta(days=180)).strftime("%Y-%m-%d")
+    end = (pd.to_datetime(input_date) + pd.Timedelta(days=2)).strftime("%Y-%m-%d")
 
     # Download data saham
     df = yf.download(
@@ -98,7 +98,8 @@ def calculate_features(ticker, input_date, open_price, high_price, low_price, cl
         start=start,
         end=end,
         auto_adjust=True,
-        progress=False
+        progress=False,
+        threads=False
     )
 
     # Jika format kolom MultiIndex maka diubah menjadi satu level
